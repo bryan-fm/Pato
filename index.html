@@ -12,9 +12,26 @@
 </head>
 
 <body>
+    <audio id="audioContainer">
+        <source src="raw/duck_quack.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audioContainer = document.getElementById("audioContainer");
+
+        function playMp3() {
+            audioContainer.play();
+        }
+
+        document.body.onkeydown = function (e) {
+                if (e.keyCode == 32) {
+                    playMp3(); 
+                }
+            }
+
+    </script>
 
     <h1>Pato</h1>
-
     <canvas></canvas>
 
     <p>O pato irá se movimentar e realizar ações aleatóriamente</p>

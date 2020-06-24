@@ -1,46 +1,11 @@
-
-
-
-
-// Frank Poth 12/23/2017
-
-
-
-/* This example will show you how to do custom sprite animation in JavaScript.
-
-It uses an Animation class that handles updating and changing a sprite's current
-
-frame, and a sprite_sheet object to hold the source image and the different animation
-
-frame sets. */
-
-
-
 (function() { "use strict";
-
-
 
   /* Each sprite sheet tile is 16x16 pixels in dimension. */
 
   const SPRITE_SIZE = 16;
 
 
-
-  /* The Animation class manages frames within an animation frame set. The frame
-
-  set is an array of values that correspond to the location of sprite images in
-
-  the sprite sheet. For example, a frame value of 0 would correspond to the first
-
-  sprite image / tile in the sprite sheet. By arranging these values in a frame set
-
-  array, you can create a sequence of frames that make an animation when played in
-
-  quick succession. */
-
   var Animation = function(frame_set, delay) {
-
-
 
     this.count = 0;// Counts the number of game cycles since the last frame change.
 
@@ -52,25 +17,12 @@ frame sets. */
 
     this.frame_set = frame_set;// The current animation frame set that holds sprite tile values.
 
-
-
   };
-
-
 
   Animation.prototype = {
 
 
-
-    /* This changes the current animation frame set. For example, if the current
-
-    set is [0, 1], and the new set is [2, 3], it changes the set to [2, 3]. It also
-
-    sets the delay. */
-
     change:function(frame_set, delay = 15) {
-
-
 
       if (this.frame_set != frame_set) {// If the frame set is different:
 
@@ -85,12 +37,7 @@ frame sets. */
         this.frame_set = frame_set;// Set the new frame set.
 
         this.frame = this.frame_set[this.frame_index];// Set the new frame value.
-
-
-
       }
-
-
 
     },
 
@@ -100,15 +47,9 @@ frame sets. */
 
     update:function() {
 
-
-
       this.count ++;// Keep track of how many cycles have passed since the last frame change.
 
-
-
       if (this.count >= this.delay) {// If enough cycles have passed, we change the frame.
-
-
 
         this.count = 0;// Reset the count.
 
@@ -119,36 +60,19 @@ frame sets. */
         this.frame_index = (this.frame_index == this.frame_set.length - 1) ? 0 : this.frame_index + 1;
 
         this.frame = this.frame_set[this.frame_index];// Change the current frame value.
-
-
-
       }
-
-
-
     }
-
-
-
   };
 
 
 
-  var buffer, controller, display, loop, player, render, resize, sprite_sheet;
-
-
-
+  var buffer, controller, display, loop, player, render, resize, sprite_sheet, quack;
   buffer = document.createElement("canvas").getContext("2d");
-
   display = document.querySelector("canvas").getContext("2d");
 
 
-
   /* I made some changes to the controller object. */
-
   controller = {
-
-
 
     /* Now each key object knows its physical state as well as its active state.
 
@@ -162,37 +86,16 @@ frame sets. */
 
     up:    { active:false, state:false },
 
-    down:   { active:false, state:false },
-
-
+    space:   { active:false, state:false },
 
     keyUpDown:function(event) {
-
-
 
       /* Get the physical state of the key being pressed. true = down false = up*/
 
       var key_state = (event.type == "keydown") ? true : false;
-
-
-
       switch(event.keyCode) {
 
-
-
         case 37:// left key
-
-          /* If the virtual state of the key is not equal to the physical state
-
-          of the key, we know something has changed, and we must update the active
-
-          state of the key. By doing this it prevents repeat firing of keydown events
-
-          from altering the active state of the key. Basically, when you are jumping,
-
-          holding the jump key down isn't going to work. You'll have to hit it every
-
-          time, but only if you set the active key state to false when you jump. */
 
           if (controller.left.state != key_state) controller.left.active = key_state;
 
@@ -202,58 +105,39 @@ frame sets. */
 
         case 38:// up key
 
-
-
           if (controller.up.state != key_state) controller.up.active = key_state;
 
           controller.up.state  = key_state;
-
-
 
         break;
 
         case 39:// right key
 
-
-
           if (controller.right.state != key_state) controller.right.active = key_state;
 
           controller.right.state  = key_state;
 
-
-
         break;
 
-        case 40:// down
+        case 32:// space
         
+            if (controller.space.state != key_state) controller.space.active = key_state;
 
-            if (controller.down.state != key_state) controller.down.active = key_state;
-
-            controller.down.state  = key_state;
-
+            controller.space.state  = key_state;
 
         break;
 
         }
 
 
-
       //console.log("left:  " + controller.left.state + ", " + controller.left.active + "\nright: " + controller.right.state + ", " + controller.right.active + "\nup:    " + controller.up.state + ", " + controller.up.active);
 
-
-
     }
-
-
 
   };
 
 
-  /* The player object is just a rectangle with an animation object. */
-
   player = {
-
-
 
     animation:new Animation(),// You don't need to setup Animation right away.
 
@@ -265,39 +149,61 @@ frame sets. */
 
     x_velocity:0, y_velocity:0
 
-
-
   };
 
+  window.setInterval(function () {
+    var a = Math.floor(Math.random() * 11);
+    if(a == 1)
+    {
+      controller.right.active = true;
+      controller.left.active = false;
+      controller.space.active = false;
+      controller.up.active = false;
+    }
+    else if (a == 0)
+    {
+      controller.left.active = true;
+      controller.right.active = false;
+      controller.space.active = false;
+      controller.up.active = false;
+    }
 
+    else if (a == 2) {
+      controller.up.active = true;
+      controller.space.active = false;
+      controller.left.active = false;
+      controller.right.active = false;
+    }
 
-  /* The sprite sheet object holds the sprite sheet graphic and some animation frame
+    else if (a == 3)
+    {
+      controller.space.active = true;
+      controller.left.active = false;
+      controller.right.active = false;
+      controller.up.active = false;
+    }
 
-  sets. An animation frame set is just an array of frame values that correspond to
+    else{
+      controller.space.active = false;
+      controller.left.active = false;
+      controller.right.active = false;
+      controller.up.active = false;
+    }
+  }, 1000);
 
-  each sprite image in the sprite sheet, just like a tile sheet and a tile map. */
 
   sprite_sheet = {
 
-
-
-    frame_sets:[[0, 1], [2, 3], [4, 5]],// standing still, walk right, walk left
+    frame_sets:[[0, 1], [2, 3], [4, 5], [6]],// standing still, walk right, walk left
 
     image:new Image()
 
-
-
   };
-
 
 
   loop = function(time_stamp) {
 
-
-
     if (controller.up.active && !player.jumping) {
-
-
 
       controller.up.active = false;
 
@@ -305,58 +211,34 @@ frame sets. */
 
       player.y_velocity -= 2.5;
 
-
-
     }
-
-
 
     if (controller.left.active) {
 
-
-
-      /* To change the animation, all you have to do is call animation.change. */
-
       player.animation.change(sprite_sheet.frame_sets[2], 15);
 
-      player.x_velocity -= 0.05;
-
-
+      player.x_velocity -= 0.02;
 
     }
 
     if (controller.right.active) {
 
-
-
       player.animation.change(sprite_sheet.frame_sets[1], 15);
 
-      player.x_velocity += 0.05;
-
-
+      player.x_velocity += 0.02;
 
     }
 
-    if (controller.down.active) {
+    if (controller.space.active) {
 
-
-
-        player.animation.change(sprite_sheet.frame_sets[1], 15);
-  
-        player.x_velocity += 0.05;
-  
-  
+      player.animation.change(sprite_sheet.frame_sets[3], 15);
   
       }
 
 
-    if (!controller.left.active && !controller.right.active) {
-
-
+    if (!controller.left.active && !controller.right.active && !controller.space.active) {
 
       player.animation.change(sprite_sheet.frame_sets[0], 20);
-
-
 
     }
 
@@ -459,17 +341,6 @@ frame sets. */
     buffer.fillRect(0, 36, buffer.canvas.width, 4);
 
 
-
-    /* When you draw your sprite, just use the animation frame value to determine
-
-    where to cut your image from the sprite sheet. It's the same technique used
-
-    for cutting tiles out of a tile sheet. Here I have a very easy implementation
-
-    set up because my sprite sheet is only a single row. */
-
-
-
     /* 02/07/2018 I added Math.floor to the player's x and y positions to eliminate
 
     antialiasing issues. Take out the Math.floor to see what I mean. */
@@ -491,18 +362,6 @@ frame sets. */
 
 
     display.canvas.width = document.documentElement.clientWidth - 100;
-
-
-
-    /*if (display.canvas.width > document.documentElement.clientHeight) {
-
-
-
-      display.canvas.width = document.documentElement.clientHeight;
-
-
-
-    }*/
 
 
 
@@ -559,8 +418,6 @@ frame sets. */
 
 
   sprite_sheet.image.src = "animation.png";// Start loading the image.
-
-
 
 })();
 
