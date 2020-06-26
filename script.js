@@ -88,6 +88,8 @@
 
     space:   { active:false, state:false },
 
+    send:   { active:false, state:false },
+
     keyUpDown:function(event) {
 
       /* Get the physical state of the key being pressed. true = down false = up*/
@@ -151,6 +153,28 @@
 
   };
 
+  var dest = document.getElementById("myText");
+
+
+  function sendMail(email) {
+      Email.send("shiroitheduck@gmail.com",
+      email,
+      "Quack" + "Quack",
+      "this is the body",
+      "smtp.gmail.com",
+      "shiroitheduck@gmail.com",
+      "fbgz8451");
+  }
+
+  var btn = document.getElementById("enviar").onclick = function()
+  {
+      if (dest.value == "    ")
+          alert("Informe o Email")
+      else
+      controller.send.active = true;
+      sendMail(dest.value);
+  };
+
   window.setInterval(function () {
     var a = Math.floor(Math.random() * 11);
     if(a == 1)
@@ -189,13 +213,16 @@
       controller.left.active = false;
       controller.right.active = false;
       controller.up.active = false;
+      controller.send.active = false;
     }
+
+    
   }, 1000);
 
 
   sprite_sheet = {
 
-    frame_sets:[[0, 1], [2, 3], [4, 5], [6]],// standing still, walk right, walk left
+    frame_sets:[[0, 1], [2, 3], [4, 5], [6], [7]],// standing still, walk right, walk left
 
     image:new Image()
 
@@ -230,14 +257,18 @@
 
     }
 
+    if (controller.send.active)
+    {
+      player.animation.change(sprite_sheet.frame_sets[4], 15);
+    }
+
     if (controller.space.active) {
 
       player.animation.change(sprite_sheet.frame_sets[3], 15);
   
       }
 
-
-    if (!controller.left.active && !controller.right.active && !controller.space.active) {
+    if (!controller.left.active && !controller.right.active && !controller.space.active && !controller.send.active) {
 
       player.animation.change(sprite_sheet.frame_sets[0], 20);
 

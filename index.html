@@ -36,36 +36,13 @@
 
     <textarea id="myText" style="width: 300px;">
     </textarea>
-    <button id="enviar">Duckmail</button>
+    <button id="enviar" onClick="enviar()">Duckmail</button>
     <canvas></canvas>
 
     <p>O pato irá se movimentar e realizar ações aleatóriamente</p>
 
     <script src="script.js" type="text/javascript"></script>
 
-    <script>
-        dest = document.getElementById("myText");
-
-        
-
-        function sendMail(email) {
-            Email.send("shiroitheduck@gmail.com",
-            email,
-            "Quack" + "Quack",
-            "this is the body",
-            "smtp.gmail.com",
-            "shiroitheduck@gmail.com",
-            "fbgz8451");
-        }
-
-        btn = document.getElementById("enviar").onclick = function()
-        {
-            if (dest.value == "    ")
-                alert("Informe o Email")
-            else
-                sendMail(dest.value);
-        };
-    </script>
 
 </body>
 
