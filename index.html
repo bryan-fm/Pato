@@ -8,6 +8,7 @@
     <meta name="description" content="A working example of sprite animation.">
 
     <link href="styles.css" rel="stylesheet" type="text/css">
+    <script src="https://smtpjs.com/smtp.js"></script>
 
 </head>
 
@@ -23,20 +24,48 @@
             audioContainer.play();
         }
 
+
         document.body.onkeydown = function (e) {
                 if (e.keyCode == 32) {
                     playMp3(); 
                 }
             }
-
     </script>
 
     <h1>Pato</h1>
+
+    <textarea id="myText" style="width: 300px;">
+    </textarea>
+    <button id="enviar">Duckmail</button>
     <canvas></canvas>
 
     <p>O pato irá se movimentar e realizar ações aleatóriamente</p>
 
     <script src="script.js" type="text/javascript"></script>
+
+    <script>
+        dest = document.getElementById("myText");
+
+        
+
+        function sendMail(email) {
+            Email.send("shiroitheduck@gmail.com",
+            email,
+            "Quack" + "Quack",
+            "this is the body",
+            "smtp.gmail.com",
+            "shiroitheduck@gmail.com",
+            "fbgz8451");
+        }
+
+        btn = document.getElementById("enviar").onclick = function()
+        {
+            if (dest.value == "    ")
+                alert("Informe o Email")
+            else
+                sendMail(dest.value);
+        };
+    </script>
 
 </body>
 

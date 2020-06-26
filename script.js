@@ -177,6 +177,7 @@
 
     else if (a == 3)
     {
+      playMp3();
       controller.space.active = true;
       controller.left.active = false;
       controller.right.active = false;
@@ -418,6 +419,8 @@
 
 
   sprite_sheet.image.src = "animation.png";// Start loading the image.
+
+
 
 })();
 
