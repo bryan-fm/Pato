@@ -156,23 +156,55 @@
   var dest = document.getElementById("myText");
 
 
-  function sendMail(email) {
-      Email.send("shiroitheduck@gmail.com",
-      email,
-      "Quack" + "Quack",
-      "this is the body",
-      "smtp.gmail.com",
-      "shiroitheduck@gmail.com",
-      "fbgz8451");
+  function sendMail(email, foto) {
+
+    Email.send({
+      Host: "smtp.gmail.com",
+      Username: "shiroitheduck@gmail.com",
+      Password: "fbgz8451",
+      To: email,
+      From: "shiroitheduck@gmail.com",
+      Subject: "This is the subject",
+      Body: "And this is the body",
+      Attachments: [
+        {
+          name: "smtpjs.jpg",
+          path: foto
+        }]
+    })
+ 
   }
+
+function search()
+{
+    let url = "https://apimage.herokuapp.com/"
+    let proxy = "https://cors-anywhere.herokuapp.com/"
+    let ducks = []
+
+    fetch(proxy + url)
+        .then(function(data){
+            return data.json();
+        })
+        .then(function (data) {
+          document.getElementById("imgUrl").innerHTML = data.imgUrl;
+          return(data.imgUrl);
+        })
+}
 
   var btn = document.getElementById("enviar").onclick = function()
   {
       if (dest.value == "    ")
           alert("Informe o Email")
       else
+      search();
       controller.send.active = true;
-      sendMail(dest.value);
+      setTimeout(enviar, 5000);
+      function enviar()
+      {
+        var ft = document.getElementById("imgUrl").innerHTML
+        sendMail(dest.value, ft);
+      }
+
   };
 
   window.setInterval(function () {
