@@ -161,7 +161,7 @@
     Email.send({
       Host: "smtp.gmail.com",
       Username: "shiroitheduck@gmail.com",
-      Password: "fbgz8451",
+      Password: "*",
       To: email,
       From: "shiroitheduck@gmail.com",
       Subject: "This is the subject",
